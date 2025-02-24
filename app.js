@@ -17,6 +17,17 @@ const firebaseConfig = {
     measurementId: "G-QR4PNWXLW0"
 };
 
+import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+
+setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+        signInAnonymously(auth);
+    })
+    .catch((error) => {
+        console.error("Error setting persistence:", error);
+    });
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
