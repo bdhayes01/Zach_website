@@ -1,6 +1,7 @@
 // Import and configure Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAe4LmT1fSh-elfgif-h984879QiHn5QyQ",
@@ -15,6 +16,25 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Automatically sign in anonymously
+signInAnonymously(auth)
+    .then(() => {
+        console.log("Signed in anonymously");
+    })
+    .catch((error) => {
+        console.error("Error signing in:", error);
+    });
+
+// Handle authentication state
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User ID:", user.uid);
+    } else {
+        console.log("User is signed out");
+    }
+});
 
 // Function to submit number
 window.submitNumber = async function() {
@@ -25,6 +45,7 @@ window.submitNumber = async function() {
         try {
             await addDoc(collection(db, "numbers"), {
                 value: parseInt(numberInput),
+                userId: auth.currentUser.uid, // Save the user's ID
                 timestamp: new Date()
             });
             message.innerText = "Number submitted successfully!";
