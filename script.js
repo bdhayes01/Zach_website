@@ -37,13 +37,13 @@ function getLastWeek(){
 function store(e) {
     let curr_map = new Map();
     const now = new Date();
-    const currentTime = now.toLocaleTimeString();
+    // const currentTime = now.toLocaleTimeString();
 
     if(localStorage.getItem('local_pain') !== null) {
         curr_map = JSON.parse(localStorage.getItem('local_pain'));
         curr_map = new Map(Object.entries(curr_map));
     }
-    curr_map.set(currentTime, e.value);
+    curr_map.set(now, parseInt(e));
 
     let obj = Object.fromEntries(curr_map);
 
