@@ -49,3 +49,7 @@ function store(e) {
 
     localStorage.setItem('local_pain', JSON.stringify(obj))
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    getLastWeek();
+});
