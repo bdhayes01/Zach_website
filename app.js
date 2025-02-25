@@ -63,8 +63,8 @@ window.submitNumber = async function() {
         try {
             await addDoc(collection(db, "numbers"), {
                 value: parseInt(numberInput),
-                userId: auth.currentUser.uid, // Save the user's ID
-                timestamp: serverTimestamp() // Save the current timestamp
+                userId: auth.currentUser.uid, // Ensure you're saving this!
+                timestamp: serverTimestamp()
             });
             message.innerText = "Number submitted successfully!";
             message.style.color = "green";
@@ -88,7 +88,6 @@ window.fetchNumbers = async function() {
 
     if (auth.currentUser) {
         const q = query(collection(db, "numbers"), where("userId", "==", auth.currentUser.uid));
-
         try {
             const querySnapshot = await getDocs(q);
             if (querySnapshot.empty) {
@@ -107,6 +106,7 @@ window.fetchNumbers = async function() {
                 });
             }
         } catch (error) {
+            console.log("Querying Firestore for user ID:", auth.currentUser.uid);
             console.error("Error fetching documents: ", error);
         }
     } else {
